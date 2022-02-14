@@ -1,6 +1,6 @@
 require("neo-tree").setup({
 	popup_border_style = "rounded",
-	enable_git_status = true,
+	enable_git_status = false,
 	enable_diagnostics = true,
 	filesystem = {
 		filters = { --These filters are applied to both browsing and searching

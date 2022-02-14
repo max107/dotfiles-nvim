@@ -15,15 +15,33 @@ return require("packer").startup({
 	function()
 		-- Autorecompile packages
 		vim.cmd([[
-            augroup packer_user_config
-                autocmd!
-                autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-            augroup end
+  augroup packer_user_config
+      autocmd!
+      autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+  augroup end
 
-            nnoremap <F9> :PackerSync<CR>
-        ]])
+  nnoremap <F9> :PackerSync<CR>
+]])
 
 		use("wbthomason/packer.nvim")
+
+		use({
+			"crispgm/nvim-go",
+			requires = {
+				"nvim-lua/plenary.nvim",
+				"nvim-lua/popup.nvim",
+			},
+			config = function()
+				require("go").setup({})
+				vim.cmd([[
+                    augroup NvimGo
+                        autocmd!
+                        autocmd User NvimGoLintPopupPost wincmd p
+                    augroup END
+                ]])
+			end,
+		})
+
 		use({
 			"terrortylor/nvim-comment",
 			requires = {
@@ -43,24 +61,39 @@ return require("packer").startup({
 				require("autopairs-config")
 			end,
 		})
+		use("fgsch/vim-varnish")
+		use("chr4/nginx.vim")
+		use("towolf/vim-helm")
+		use("nelsyeung/twig.vim")
 		use({
 			"j-hui/fidget.nvim",
 			config = function()
 				require("fidget").setup({})
 			end,
 		})
+
 		use({
-			"nvim-neo-tree/neo-tree.nvim",
-			branch = "v1.x",
+			"kyazdani42/nvim-tree.lua",
 			requires = {
-				"nvim-lua/plenary.nvim",
-				"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
-				"MunifTanjim/nui.nvim",
+				"kyazdani42/nvim-web-devicons", -- optional, for file icon
 			},
 			config = function()
-				require("neotree-config")
+				require("nvimtree-config")
 			end,
 		})
+		-- use({
+		-- 	"nvim-neo-tree/neo-tree.nvim",
+		-- 	branch = "v1.x",
+		-- 	requires = {
+		-- 		"nvim-lua/plenary.nvim",
+		-- 		"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+		-- 		"MunifTanjim/nui.nvim",
+		-- 	},
+		-- 	config = function()
+		-- 		require("neotree-config")
+		-- 	end,
+		-- })
+
 		use({
 			"onsails/lspkind-nvim",
 			config = function()
@@ -142,8 +175,8 @@ return require("packer").startup({
 			"sainnhe/sonokai",
 			config = function()
 				-- vim.cmd([[ let g:sonokai_style = 'andromeda' ]])
-				vim.cmd([[ let g:sonokai_style = 'shusia' ]])
-				-- vim.cmd([[ let g:sonokai_style = 'maia' ]])
+				-- vim.cmd([[ let g:sonokai_style = 'shusia' ]])
+				vim.cmd([[ let g:sonokai_style = 'maia' ]])
 				-- vim.cmd([[ let g:sonokai_style = 'atlantis' ]])
 				-- vim.cmd([[ let g:sonokai_style = 'espresso' ]])
 				vim.cmd([[ colorscheme sonokai ]])
