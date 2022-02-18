@@ -18,6 +18,7 @@ opt.softtabstop = 4
 opt.shiftwidth = 4
 
 opt.number = true -- Show line number
+opt.relativenumber = true -- Show line number
 opt.showmatch = true -- Highlight matching parenthesis
 opt.foldmethod = "marker" -- Enable folding (default 'foldmarker')
 opt.colorcolumn = "80" -- Line lenght marker at 80 columns

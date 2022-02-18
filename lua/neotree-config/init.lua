@@ -2,7 +2,28 @@ require("neo-tree").setup({
 	popup_border_style = "rounded",
 	enable_git_status = false,
 	enable_diagnostics = true,
+	default_component_configs = {
+		indent = {
+			indent_size = 2,
+			padding = 1, -- extra padding on left hand side
+			with_markers = true,
+			indent_marker = "│",
+			last_indent_marker = "└",
+			highlight = "NeoTreeIndentMarker",
+		},
+		icon = {
+			folder_closed = "",
+			folder_open = "",
+			folder_empty = "ﰊ",
+			default = "*",
+		},
+		name = {
+			trailing_slash = true,
+			use_git_status_colors = true,
+		},
+	},
 	filesystem = {
+		-- hijack_netrw_behavior = "open_split",
 		filters = { --These filters are applied to both browsing and searching
 			show_hidden = true,
 			respect_gitignore = false,
@@ -13,7 +34,7 @@ require("neo-tree").setup({
 		-- to detect changes instead of relying on nvim autocmd events.
 		window = {
 			position = "left",
-			width = 40,
+			width = 32,
 			mappings = {
 				["<2-LeftMouse>"] = "open",
 				["<cr>"] = "open",
@@ -86,5 +107,12 @@ require("neo-tree").setup({
 		},
 	},
 })
+
 vim.cmd([[nnoremap <F3> :NeoTreeFocusToggle<cr>]])
 vim.cmd("nnoremap <leader>fr :NeoTreeReveal<cr>")
+vim.cmd("nnoremap <F4> :NeoTreeShow buffers<cr>")
+
+vim.cmd([[ hi link NeoTreeDirectoryName yellow ]])
+vim.cmd([[ hi link NeoTreeDirectoryIcon yellow ]])
+-- vim.cmd([[ hi link NeoTreeDirectoryName Directory ]])
+-- vim.cmd([[ hi link NeoTreeDirectoryIcon NeoTreeDirectoryName ]])

@@ -34,11 +34,11 @@ return require("packer").startup({
 			config = function()
 				require("go").setup({})
 				vim.cmd([[
-                    augroup NvimGo
-                        autocmd!
-                        autocmd User NvimGoLintPopupPost wincmd p
-                    augroup END
-                ]])
+            augroup NvimGo
+                autocmd!
+                autocmd User NvimGoLintPopupPost wincmd p
+            augroup END
+        ]])
 			end,
 		})
 
