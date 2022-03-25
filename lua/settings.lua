@@ -28,6 +28,8 @@ opt.ignorecase = true -- Ignore case letters when search
 opt.smartcase = true -- Ignore lowercase for the whole pattern
 opt.linebreak = false -- Wrap on word boundary
 
+opt.winminwidth = 0
+
 -- Remove whitespace on save
 cmd([[au BufWritePre * :%s/\s\+$//e]])
 

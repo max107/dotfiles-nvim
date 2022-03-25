@@ -7,6 +7,7 @@ null.setup({
 	end,
 	sources = {
 		null.builtins.formatting.stylua,
+		null.builtins.formatting.black,
 		null.builtins.formatting.prettier.with({
 			filetypes = { "scss", "css", "json", "yaml", "markdown", "graphql" },
 		}),
