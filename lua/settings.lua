@@ -202,3 +202,5 @@ map("n", "<C-t>", ":Term<CR>", { noremap = true })
 
 -- nvim-tree
 map("n", "<leader>fr", ":NvimTreeFindFile<CR>", default_opts) -- open/close
+
+map("n", "<leader>fc", ":lua vim.lsp.buf.formatting_sync()<CR>", default_opts)
