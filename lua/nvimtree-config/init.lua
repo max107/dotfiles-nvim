@@ -7,9 +7,13 @@ require("nvim-tree").setup({
 		ignore = true,
 		timeout = 500,
 	},
+	actions = {
+		open_file = {
+			resize_window = true,
+		},
+	},
 	view = {
-		auto_resize = false,
-		width = 30,
+		width = 25,
 		height = 30,
 		hide_root_folder = false,
 		side = "left",

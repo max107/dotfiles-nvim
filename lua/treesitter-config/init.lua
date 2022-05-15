@@ -53,7 +53,7 @@ require("nvim-treesitter.configs").setup({
 		disable = {},
 	},
 	indent = {
-		enable = false,
+		enable = true,
 		disable = {},
 	},
 	ensure_installed = {

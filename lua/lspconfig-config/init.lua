@@ -1,6 +1,8 @@
 local nvim_lsp = require("lspconfig")
+local coq = require("coq")
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
+
 local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
 vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
@@ -33,15 +35,15 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
 	-- if client.resolved_capabilities.document_formatting then
 	-- 	vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
 	-- end
 end
 
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.textDocument.completion.completionItem.snippetSupport = true
+-- local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local servers = {
 	"html",
@@ -56,10 +58,10 @@ local servers = {
 	"intelephense",
 }
 for _, lsp in ipairs(servers) do
-	nvim_lsp[lsp].setup({
+	nvim_lsp[lsp].setup(coq.lsp_ensure_capabilities({
 		on_attach = on_attach,
-		capabilities = capabilities,
-	})
+		-- capabilities = capabilities,
+	}))
 end
 
 vim.cmd("nnoremap <F6> :LspInfo<CR>")
