@@ -62,8 +62,8 @@ return require("packer").startup({
 			},
 			config = function()
 				require("go").setup({
-          auto_lint = false,
-        })
+					auto_lint = false,
+				})
 				vim.cmd([[
             augroup NvimGo
                 autocmd!
@@ -87,7 +87,7 @@ return require("packer").startup({
 		})
 		use({
 			"windwp/nvim-autopairs",
-			-- after = "nvim-cmp",
+			after = "nvim-cmp",
 			config = function()
 				require("autopairs-config")
 			end,
@@ -137,28 +137,28 @@ return require("packer").startup({
 			"ms-jpq/coq.artifacts",
 		})
 
-		use({
-			"ms-jpq/coq_nvim",
-			run = ":COQdeps",
-			config = function()
-        require("coq-config")
-			end,
-		})
-
 		-- use({
-		-- 	"hrsh7th/nvim-cmp",
-		-- 	requires = {
-		-- 		"hrsh7th/cmp-nvim-lsp", -- nvim-cmp source for neovim builtin LSP client
-		-- 		"hrsh7th/cmp-nvim-lua", -- nvim-cmp source for nvim lua
-		-- 		"hrsh7th/cmp-buffer", -- nvim-cmp source for buffer words.
-		-- 		"hrsh7th/cmp-path", -- nvim-cmp source for filesystem paths.
-		-- 		"saadparwaiz1/cmp_luasnip", -- luasnip completion source for nvim-cmp
-		-- 		"L3MON4D3/LuaSnip", -- Snippets plugin
-		-- 	},
+		-- 	"ms-jpq/coq_nvim",
+		-- 	run = ":COQdeps",
 		-- 	config = function()
-		-- 		require("nvim-cmp-config")
+		--         require("coq-config")
 		-- 	end,
 		-- })
+
+		use({
+			"hrsh7th/nvim-cmp",
+			requires = {
+				"hrsh7th/cmp-nvim-lsp", -- nvim-cmp source for neovim builtin LSP client
+				"hrsh7th/cmp-nvim-lua", -- nvim-cmp source for nvim lua
+				"hrsh7th/cmp-buffer", -- nvim-cmp source for buffer words.
+				"hrsh7th/cmp-path", -- nvim-cmp source for filesystem paths.
+				"saadparwaiz1/cmp_luasnip", -- luasnip completion source for nvim-cmp
+				"L3MON4D3/LuaSnip", -- Snippets plugin
+			},
+			config = function()
+				require("nvim-cmp-config")
+			end,
+		})
 
 		use({
 			"nvim-treesitter/nvim-treesitter",
@@ -203,6 +203,13 @@ return require("packer").startup({
 			},
 			config = function()
 				require("telescope-config")
+			end,
+		})
+
+		use({
+			"gpanders/editorconfig.nvim",
+			config = function()
+				require("editorconfig")
 			end,
 		})
 
