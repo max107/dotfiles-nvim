@@ -1,3 +1,8 @@
+local ok, _ = pcall(require, "nvim-tree")
+if not ok then
+	return
+end
+
 require("nvim-tree").setup({
 	disable_netrw = true,
 	hijack_netrw = true,
@@ -23,5 +28,14 @@ require("nvim-tree").setup({
 		number = false,
 		relativenumber = false,
 		signcolumn = "yes",
+		adaptive_size = true,
+		mappings = {
+			list = {
+				-- { key = "<Left>", action = "parent" },
+			},
+		},
 	},
 })
+
+-- nvim-tree
+vim.api.nvim_set_keymap("n", "<leader>fr", ":NvimTreeFindFile<CR>", default_opts) -- open/close

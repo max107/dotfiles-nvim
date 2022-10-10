@@ -1,8 +1,9 @@
-local core = require("core")
-local nvim_lsp = require("lspconfig")
-if core.is_module_available("coq") then
-	local coq = require("coq")
+local ok, _ = pcall(require, "lspconfig")
+if not ok then
+	return
 end
+
+local nvim_lsp = require("lspconfig")
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 
@@ -40,15 +41,13 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
-	if client.resolved_capabilities.document_formatting then
-		vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
-	end
+	-- if client.server_capabilities.document_formatting then
+	vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
+	-- end
 end
 
-if core.is_module_available("cmp_nvim_lsp") then
-	local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
-	capabilities.textDocument.completion.completionItem.snippetSupport = true
-end
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local servers = {
 	"html",
@@ -62,17 +61,12 @@ local servers = {
 	"intelephense",
 }
 for _, lsp in ipairs(servers) do
-	if core.is_module_available("coq") then
-		nvim_lsp[lsp].setup(coq.lsp_ensure_capabilities({
-			on_attach = on_attach,
-			-- capabilities = capabilities,
-		}))
-	else
-		nvim_lsp[lsp].setup({
-			on_attach = on_attach,
-			capabilities = capabilities,
-		})
-	end
+	nvim_lsp[lsp].setup({
+		on_attach = on_attach,
+		server_capabilities = capabilities,
+	})
 end
 
 vim.cmd("nnoremap <F6> :LspInfo<CR>")
+
+vim.api.nvim_set_keymap("n", "<leader>fc", ":lua vim.lsp.buf.formatting_sync()<CR>", { noremap = true })

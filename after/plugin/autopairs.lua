@@ -1,4 +1,8 @@
-local core = require("core")
+local ok, _ = pcall(require, "nvim-autopairs")
+if not ok then
+	return
+end
+
 local npairs = require("nvim-autopairs")
 npairs.setup({
 	enable_check_bracket_line = true, -- Don't add pairs if it already have a close pairs in same line
@@ -8,11 +12,9 @@ npairs.setup({
 })
 
 -- If you want insert `(` after select function or method item
-if core.is_module_available("cmp") then
-	local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-	local cmp = require("cmp")
-	cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-end
+local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+local cmp = require("cmp")
+cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
 local Rule = require("nvim-autopairs.rule")
 

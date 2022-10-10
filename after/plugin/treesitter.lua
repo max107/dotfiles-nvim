@@ -1,3 +1,8 @@
+local ok, _ = pcall(require, "nvim-treesitter")
+if not ok then
+	return
+end
+
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
 	underline = true,
 	virtual_text = {
@@ -20,12 +25,12 @@ require("nvim-treesitter.configs").setup({
 		enable = true,
 	},
 	refactor = {
-		-- highlight_definitions = {
-		--     enable = true
-		-- },
-		-- highlight_current_scope = {
-		--     enable = true
-		-- },
+		highlight_definitions = {
+			enable = true,
+		},
+		highlight_current_scope = {
+			enable = true,
+		},
 		smart_rename = {
 			enable = true,
 			keymaps = {

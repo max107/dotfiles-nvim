@@ -27,51 +27,21 @@ return require("packer").startup({
 
 		use({
 			"kdheepak/tabline.nvim",
-			config = function()
-				require("tabline").setup({
-					-- Defaults configuration options
-					enable = true,
-					options = {
-						-- If lualine is installed tabline will use separators configured in lualine by default.
-						-- These options can be used to override those settings.
-						section_separators = { "", "" },
-						component_separators = { "", "" },
-						max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
-						show_tabs_always = false, -- this shows tabs only when there are more than one tab or if the first tab is named
-						show_devicons = true, -- this shows devicons in buffer section
-						show_bufnr = false, -- this appends [bufnr] to buffer section,
-						show_filename_only = false, -- shows base filename only instead of relative path in filename
-						modified_icon = "+ ", -- change the default modified icon
-						modified_italic = false, -- set to true by default; this determines whether the filename turns italic if modified
-						show_tabs_only = false, -- this shows only tabs instead of tabs + buffers
-					},
-				})
-				vim.cmd([[
-		      set guioptions-=e " Use showtabline in gui vim
-		      set sessionoptions+=tabpages,globals " store tabpages and globals in session
-		    ]])
-			end,
-			requires = { { "hoob3rt/lualine.nvim", opt = true }, { "kyazdani42/nvim-web-devicons", opt = true } },
+			requires = {
+				{ "hoob3rt/lualine.nvim", opt = true },
+				{ "kyazdani42/nvim-web-devicons", opt = true },
+			},
 		})
 
-		use({
-			"crispgm/nvim-go",
-			requires = {
-				"nvim-lua/plenary.nvim",
-				"nvim-lua/popup.nvim",
-			},
-			config = function()
-				require("go").setup({
-					auto_lint = false,
-				})
-				vim.cmd([[
-            augroup NvimGo
-                autocmd!
-                autocmd User NvimGoLintPopupPost wincmd p
-            augroup END
-        ]])
-			end,
-		})
+		use("ray-x/go.nvim")
+		use("ray-x/guihua.lua") -- recommanded if need floating window support
+		-- use({
+		-- 	"crispgm/nvim-go",
+		-- 	requires = {
+		-- 		"nvim-lua/plenary.nvim",
+		-- 		"nvim-lua/popup.nvim",
+		-- 	},
+		-- })
 
 		use({
 			"terrortylor/nvim-comment",
@@ -81,16 +51,10 @@ return require("packer").startup({
 					after = "nvim-treesitter",
 				},
 			},
-			config = function()
-				require("comment-config")
-			end,
 		})
 		use({
 			"windwp/nvim-autopairs",
 			after = "nvim-cmp",
-			config = function()
-				require("autopairs-config")
-			end,
 		})
 		use("fgsch/vim-varnish")
 		use("chr4/nginx.vim")
@@ -103,47 +67,48 @@ return require("packer").startup({
 			end,
 		})
 
-		use({
-			"kyazdani42/nvim-tree.lua",
-			requires = {
-				"kyazdani42/nvim-web-devicons", -- optional, for file icon
-			},
-			config = function()
-				require("nvimtree-config")
-			end,
-		})
-
 		-- use({
-		-- 	"nvim-neo-tree/neo-tree.nvim",
-		-- 	branch = "v1.x",
+		-- 	"kyazdani42/nvim-tree.lua",
 		-- 	requires = {
-		-- 		"nvim-lua/plenary.nvim",
-		-- 		"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
-		-- 		"MunifTanjim/nui.nvim",
+		-- 		"kyazdani42/nvim-web-devicons", -- optional, for file icon
 		-- 	},
-		-- 	config = function()
-		-- 		require("neotree-config")
-		-- 	end,
 		-- })
+
+		use({
+			"nvim-neo-tree/neo-tree.nvim",
+			branch = "v2.x",
+			requires = {
+				"nvim-lua/plenary.nvim",
+				"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+				"MunifTanjim/nui.nvim",
+				{
+					-- only needed if you want to use the commands with "_with_window_picker" suffix
+					"s1n7ax/nvim-window-picker",
+					tag = "v1.*",
+					config = function()
+						require("window-picker").setup({
+							autoselect_one = true,
+							include_current = false,
+							filter_rules = {
+								-- filter using buffer options
+								bo = {
+									-- if the file type is one of following, the window will be ignored
+									filetype = { "neo-tree", "neo-tree-popup", "notify", "quickfix" },
+
+									-- if the buffer type is one of following, the window will be ignored
+									buftype = { "terminal" },
+								},
+							},
+							other_win_hl_color = "#e35e4f",
+						})
+					end,
+				},
+			},
+		})
 
 		use({
 			"onsails/lspkind-nvim",
-			config = function()
-				require("lspkind-config")
-			end,
 		})
-
-		use({
-			"ms-jpq/coq.artifacts",
-		})
-
-		-- use({
-		-- 	"ms-jpq/coq_nvim",
-		-- 	run = ":COQdeps",
-		-- 	config = function()
-		--         require("coq-config")
-		-- 	end,
-		-- })
 
 		use({
 			"hrsh7th/nvim-cmp",
@@ -155,9 +120,6 @@ return require("packer").startup({
 				"saadparwaiz1/cmp_luasnip", -- luasnip completion source for nvim-cmp
 				"L3MON4D3/LuaSnip", -- Snippets plugin
 			},
-			config = function()
-				require("nvim-cmp-config")
-			end,
 		})
 
 		use({
@@ -179,9 +141,6 @@ return require("packer").startup({
 					after = "nvim-treesitter",
 				},
 			},
-			config = function()
-				require("treesitter-config")
-			end,
 		})
 
 		use({
@@ -190,9 +149,6 @@ return require("packer").startup({
 
 		use({
 			"neovim/nvim-lspconfig",
-			config = function()
-				require("lspconfig-config")
-			end,
 		})
 
 		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
@@ -201,23 +157,14 @@ return require("packer").startup({
 			requires = {
 				"nvim-lua/plenary.nvim",
 			},
-			config = function()
-				require("telescope-config")
-			end,
 		})
 
 		use({
 			"gpanders/editorconfig.nvim",
-			config = function()
-				require("editorconfig")
-			end,
 		})
 
 		use({
 			"jose-elias-alvarez/null-ls.nvim",
-			config = function()
-				require("null-ls-config")
-			end,
 		})
 		use({
 			"jose-elias-alvarez/nvim-lsp-ts-utils",
@@ -225,14 +172,21 @@ return require("packer").startup({
 		use({
 			"sainnhe/sonokai",
 			config = function()
-				-- vim.cmd([[ let g:sonokai_style = 'andromeda' ]])
-				-- vim.cmd([[ let g:sonokai_style = 'shusia' ]])
-				vim.cmd([[ let g:sonokai_style = 'maia' ]])
-				-- vim.cmd([[ let g:sonokai_style = 'atlantis' ]])
-				-- vim.cmd([[ let g:sonokai_style = 'espresso' ]])
 				vim.cmd([[ colorscheme sonokai ]])
 			end,
 		})
+		use({
+			"folke/tokyonight.nvim",
+			config = function()
+				-- vim.cmd([[ colorscheme tokyonight ]])
+			end,
+		})
+		-- use({
+		-- 	"projekt0n/github-nvim-theme",
+		-- 	config = function()
+		-- 		vim.cmd([[ colorscheme github_dark ]])
+		-- 	end,
+		-- })
 
 		if packer_bootstrap then
 			require("packer").sync()

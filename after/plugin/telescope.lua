@@ -1,4 +1,9 @@
-local core = require("core")
+local ok, _ = pcall(require, "telescope")
+if not ok then
+	return
+end
+
+local core = require("keymap")
 
 -- You dont need to set any of these options. These are the default ones. Only
 -- the loading is important
@@ -14,6 +19,7 @@ telescope.setup({
 		file_ignore_patterns = {
 			"public/build/.*",
 			"node_modules",
+			"vendor",
 			".git/.*",
 			"symfony/var/.*",
 		},
@@ -62,7 +68,8 @@ telescope.setup({
 -- load_extension, somewhere after setup function:
 telescope.load_extension("fzf")
 
-core.key_mapper("n", "<leader>ff", ":lua require'telescope.builtin'.find_files()<cr>")
-core.key_mapper("n", "<leader>fp", ":lua require'telescope.builtin'.git_files()<cr>")
-core.key_mapper("n", "<leader>fg", ":lua require'telescope.builtin'.live_grep()<cr>")
-core.key_mapper("n", "<leader>fb", ":lua require'telescope.builtin'.buffers()<cr>")
+local builtin = require("telescope.builtin")
+vim.keymap.set("n", "<leader>ff", builtin.find_files, {})
+vim.keymap.set("n", "<leader>fg", builtin.live_grep, {})
+vim.keymap.set("n", "<leader>fb", builtin.buffers, {})
+vim.keymap.set("n", "<leader>fp", builtin.git_status, {})

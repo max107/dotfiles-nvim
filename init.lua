@@ -1,8 +1,5 @@
-require("settings")
+require("core")
+require("keymap")
+require("keymap_bindings")
+require("term")
 require("plugins")
-
--- lua vim.lsp.buf.formatting_sync()
-
-vim.cmd([[
-autocmd FileType terraform setlocal commentstring=#\ %s
-]])
