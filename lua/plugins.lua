@@ -25,13 +25,13 @@ return require("packer").startup({
 
 		use("wbthomason/packer.nvim")
 
-		use({
-			"kdheepak/tabline.nvim",
-			requires = {
-				{ "hoob3rt/lualine.nvim", opt = true },
-				{ "kyazdani42/nvim-web-devicons", opt = true },
-			},
-		})
+		-- use({
+		-- 	"kdheepak/tabline.nvim",
+		-- 	requires = {
+		-- 		{ "hoob3rt/lualine.nvim", opt = true },
+		-- 		{ "kyazdani42/nvim-web-devicons", opt = true },
+		-- 	},
+		-- })
 
 		use("ray-x/go.nvim")
 		use("ray-x/guihua.lua") -- recommanded if need floating window support
@@ -179,6 +179,23 @@ return require("packer").startup({
 			"folke/tokyonight.nvim",
 			config = function()
 				-- vim.cmd([[ colorscheme tokyonight ]])
+			end,
+		})
+		use({
+			"noib3/nvim-cokeline",
+			requires = "kyazdani42/nvim-web-devicons", -- If you want devicons
+			config = function()
+				local red = vim.g.terminal_color_1
+				local yellow = vim.g.terminal_color_3
+				local get_hex = require("cokeline/utils").get_hex
+				require("cokeline").setup({
+					default_hl = {
+						fg = function(buffer)
+							return buffer.is_focused and get_hex("Normal", "fg") or get_hex("Comment", "fg")
+						end,
+						bg = get_hex("ColorColumn", "bg"),
+					},
+				})
 			end,
 		})
 		-- use({

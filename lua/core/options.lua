@@ -122,8 +122,6 @@ vim.opt.number = true
 vim.opt.colorcolumn = "80"
 vim.opt.foldenable = true
 vim.opt.signcolumn = "yes"
-vim.opt.conceallevel = 2
-vim.opt.concealcursor = "niv"
 vim.opt.showmatch = true -- Highlight matching parenthesis
 
 if vim.loop.os_uname().sysname == "Darwin" then

@@ -20,6 +20,7 @@ telescope.setup({
 			"public/build/.*",
 			"node_modules",
 			"vendor",
+			"vnev",
 			".git/.*",
 			"symfony/var/.*",
 		},
