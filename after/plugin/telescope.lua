@@ -3,8 +3,6 @@ if not ok then
 	return
 end
 
-local core = require("keymap")
-
 -- You dont need to set any of these options. These are the default ones. Only
 -- the loading is important
 local telescope = require("telescope")
@@ -12,16 +10,14 @@ telescope.setup({
 	defaults = {
 		-- prompt_position = "top",
 		-- sorting_strategy = "ascending",
-		-- file_ignore_patterns = {
-		--     'node_modules',
-		--     '.git',
-		-- },
 		file_ignore_patterns = {
 			"public/build/.*",
 			"node_modules",
 			"vendor",
-			"vnev",
-			".git/.*",
+			"venv",
+			"htmlcov",
+			".idea",
+			".git",
 			"symfony/var/.*",
 		},
 		vimgrep_arguments = {

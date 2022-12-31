@@ -88,7 +88,7 @@ local null = require("null-ls")
 null.setup({
 	on_attach = function(client)
 		-- if client.server_capabilities.document_formatting then
-		vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
+		-- vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
 		-- end
 	end,
 	sources = {

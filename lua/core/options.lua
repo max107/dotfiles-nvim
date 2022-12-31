@@ -1,30 +1,31 @@
-vim.cmd("autocmd!")
+-- vim.cmd("autocmd!")
 
+-- neovim settings
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_python_provider = 0
 vim.g.loaded_perl_provider = 0
 
-local cache_dir = os.getenv("HOME") .. "/.cache/nvim/"
-
--- vim.g.mapleader = "\\"
-vim.g.mapleader = " "
+vim.g.mapleader = "\\"
+-- vim.g.mapleader = " "
 
 vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
 vim.opt.fileencoding = "utf-8"
 
 vim.opt.lazyredraw = true -- Faster scrolling
--- vim.opt.cursorline = true
+vim.opt.cursorline = true
 vim.opt.title = true
 vim.opt.smartindent = true
 vim.opt.hlsearch = true
--- vim.opt.mouse = "a"
 vim.opt.backspace = { "start", "eol", "indent" }
 -- vim.opt.backspace = "indent,eol,start"
 vim.opt.softtabstop = 4
 -- vim.opt.softtabstop = -1
-vim.opt.foldmethod = "manual" -- folding set to "expr" for treesitter based folding
-vim.opt.foldexpr = "" -- set to "nvim_treesitter#foldexpr()" for treesitter based folding
+-- vim.opt.foldmethod = "manual" -- folding set to "expr" for treesitter based folding
+-- vim.opt.foldexpr = "" -- set to "nvim_treesitter#foldexpr()" for treesitter based folding
+
+vim.opt.foldmethod = "expr"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 vim.opt.termguicolors = true
 vim.opt.mouse = "nv"
@@ -37,19 +38,12 @@ vim.opt.virtualedit = "block"
 vim.opt.encoding = "utf-8"
 vim.opt.viewoptions = "folds,cursor,curdir,slash,unix"
 vim.opt.sessionoptions = "curdir,help,tabpages,winsize"
--- vim.opt.clipboard = "unnamed"
-vim.opt.clipboard = "unnamedplus"
 vim.opt.wildignorecase = true
 vim.opt.wildignore =
 	".git,.hg,.svn,*.pyc,*.o,*.out,*.jpg,*.jpeg,*.png,*.gif,*.zip,**/tmp/**,*.DS_Store,**/node_modules/**,**/vendor/**,**/bower_modules/**"
 vim.opt.backup = false
 vim.opt.writebackup = false
 vim.opt.swapfile = false
-vim.opt.directory = cache_dir .. "swag/"
-vim.opt.undodir = cache_dir .. "undo/"
-vim.opt.backupdir = cache_dir .. "backup/"
-vim.opt.viewdir = cache_dir .. "view/"
-vim.opt.spellfile = cache_dir .. "spell/en.uft-8.add"
 vim.opt.history = 2000
 vim.opt.shada = "!,'300,<50,@100,s10,h"
 vim.opt.backupskip = "/tmp/*,$TMPDIR/*,$TMP/*,$TEMP/*,*/shm/*,/private/var/*,.vault.vim"
@@ -59,7 +53,7 @@ vim.opt.timeout = true
 vim.opt.ttimeout = true
 vim.opt.timeoutlen = 500
 vim.opt.ttimeoutlen = 10
-vim.opt.updatetime = 100
+vim.opt.updatetime = 50
 vim.opt.redrawtime = 1500
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -86,7 +80,6 @@ vim.opt.path:append({ "**" }) -- Finding files - Search down into subfolders
 vim.opt.sidescrolloff = 5
 vim.opt.foldlevelstart = 99
 vim.opt.ruler = false
-vim.opt.list = true
 vim.opt.showtabline = 2
 vim.opt.winwidth = 30
 vim.opt.winminwidth = 10
@@ -101,7 +94,11 @@ vim.opt.equalalways = false
 vim.opt.laststatus = 2
 vim.opt.display = "lastline"
 vim.opt.showbreak = "↳  "
-vim.opt.listchars = "tab:»·,nbsp:+,trail:·,extends:→,precedes:←"
+
+-- list settings
+-- vim.opt.list = true
+-- vim.opt.listchars = "tab:»·,nbsp:+,trail:·,extends:→,precedes:←"
+
 vim.opt.pumblend = 10
 vim.opt.winblend = 10
 
@@ -124,6 +121,10 @@ vim.opt.foldenable = true
 vim.opt.signcolumn = "yes"
 vim.opt.showmatch = true -- Highlight matching parenthesis
 
+-- clipboard options
+-- vim.opt.clipboard = "unnamed"
+vim.opt.clipboard = "unnamedplus"
+
 if vim.loop.os_uname().sysname == "Darwin" then
 	vim.g.clipboard = {
 		name = "macOS-clipboard",
@@ -142,15 +143,15 @@ if vim.loop.os_uname().sysname == "Darwin" then
 end
 
 -- Undercurl
--- vim.cmd([[let &t_Cs = "\e[4:3m"]])
--- vim.cmd([[let &t_Ce = "\e[4:0m"]])
+vim.cmd([[let &t_Cs = "\e[4:3m"]])
+vim.cmd([[let &t_Ce = "\e[4:0m"]])
 
 -- Highlight on yank
 vim.cmd(
 	[[
   augroup YankHighlight
     autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=800}
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=100}
   augroup end
 ]],
 	false
@@ -170,3 +171,8 @@ vim.cmd([[au BufWritePre * :%s/\s\+$//e]])
 
 -- Don't auto commenting new lines
 vim.cmd([[au BufEnter * set fo-=c fo-=r fo-=o]])
+
+-- go to last location when opening a buffer
+vim.cmd [[
+  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
+]]

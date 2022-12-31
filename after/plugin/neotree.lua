@@ -53,7 +53,8 @@ require("neo-tree").setup({
 			highlight = "NeoTreeFileIcon",
 		},
 		modified = {
-			symbol = "[+]",
+			-- symbol = "[+]",
+			symbol = "",
 			highlight = "NeoTreeModified",
 		},
 		name = {

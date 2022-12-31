@@ -42,11 +42,11 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
 	-- if client.server_capabilities.document_formatting then
-	vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
+	-- vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
 	-- end
 end
 
-local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local servers = {
@@ -69,4 +69,4 @@ end
 
 vim.cmd("nnoremap <F6> :LspInfo<CR>")
 
-vim.api.nvim_set_keymap("n", "<leader>fc", ":lua vim.lsp.buf.formatting_sync()<CR>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>fc", ":lua vim.lsp.buf.format()<CR>", { noremap = true })

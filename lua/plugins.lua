@@ -25,14 +25,6 @@ return require("packer").startup({
 
 		use("wbthomason/packer.nvim")
 
-		-- use({
-		-- 	"kdheepak/tabline.nvim",
-		-- 	requires = {
-		-- 		{ "hoob3rt/lualine.nvim", opt = true },
-		-- 		{ "kyazdani42/nvim-web-devicons", opt = true },
-		-- 	},
-		-- })
-
 		use("ray-x/go.nvim")
 		use("ray-x/guihua.lua") -- recommanded if need floating window support
 		-- use({
@@ -56,7 +48,6 @@ return require("packer").startup({
 			"windwp/nvim-autopairs",
 			after = "nvim-cmp",
 		})
-		use("fgsch/vim-varnish")
 		use("chr4/nginx.vim")
 		use("towolf/vim-helm")
 		use("nelsyeung/twig.vim")
@@ -123,6 +114,23 @@ return require("packer").startup({
 		})
 
 		use({
+			"sainnhe/sonokai",
+			config = function()
+				-- vim.cmd([[ colorscheme sonokai ]])
+			end,
+		})
+		use({
+			"mfussenegger/nvim-dap",
+		})
+		use({
+			"whatsthatsmell/codesmell_dark.vim",
+			config = function()
+				-- configs (just yank what's in quotes and drop in your .vimrc if you're not Lua'd yet)
+				vim.cmd("set fillchars+=vert:│")
+				vim.cmd("colorscheme codesmell_dark")
+			end,
+		})
+		use({
 			"nvim-treesitter/nvim-treesitter",
 			run = ":TSUpdate",
 			event = "BufWinEnter",
@@ -141,6 +149,13 @@ return require("packer").startup({
 					after = "nvim-treesitter",
 				},
 			},
+		})
+		use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
+		use({
+			"theHamsta/nvim-dap-virtual-text",
+			config = function()
+				require("nvim-dap-virtual-text").setup()
+			end,
 		})
 
 		use({
@@ -162,7 +177,6 @@ return require("packer").startup({
 		use({
 			"gpanders/editorconfig.nvim",
 		})
-
 		use({
 			"jose-elias-alvarez/null-ls.nvim",
 		})
@@ -170,41 +184,9 @@ return require("packer").startup({
 			"jose-elias-alvarez/nvim-lsp-ts-utils",
 		})
 		use({
-			"sainnhe/sonokai",
-			config = function()
-				vim.cmd([[ colorscheme sonokai ]])
-			end,
+			"nvim-lualine/lualine.nvim",
+			requires = { "kyazdani42/nvim-web-devicons", opt = true },
 		})
-		use({
-			"folke/tokyonight.nvim",
-			config = function()
-				-- vim.cmd([[ colorscheme tokyonight ]])
-			end,
-		})
-		use({
-			"noib3/nvim-cokeline",
-			requires = "kyazdani42/nvim-web-devicons", -- If you want devicons
-			config = function()
-				local red = vim.g.terminal_color_1
-				local yellow = vim.g.terminal_color_3
-				local get_hex = require("cokeline/utils").get_hex
-				require("cokeline").setup({
-					default_hl = {
-						fg = function(buffer)
-							return buffer.is_focused and get_hex("Normal", "fg") or get_hex("Comment", "fg")
-						end,
-						bg = get_hex("ColorColumn", "bg"),
-					},
-				})
-			end,
-		})
-		-- use({
-		-- 	"projekt0n/github-nvim-theme",
-		-- 	config = function()
-		-- 		vim.cmd([[ colorscheme github_dark ]])
-		-- 	end,
-		-- })
-
 		if packer_bootstrap then
 			require("packer").sync()
 		end

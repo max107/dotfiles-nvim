@@ -1,5 +1,3 @@
 require("core")
-require("keymap")
-require("keymap_bindings")
-require("term")
 require("plugins")
+

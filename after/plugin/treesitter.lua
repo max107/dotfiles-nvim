@@ -85,6 +85,8 @@ require("nvim-treesitter.configs").setup({
 		"graphql",
 		"scss",
 		"hcl",
+		"markdown",
+		"markdown_inline",
 	},
 	sync_install = false,
 })
