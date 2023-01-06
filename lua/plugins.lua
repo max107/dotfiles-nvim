@@ -120,9 +120,6 @@ return require("packer").startup({
 			end,
 		})
 		use({
-			"mfussenegger/nvim-dap",
-		})
-		use({
 			"whatsthatsmell/codesmell_dark.vim",
 			config = function()
 				-- configs (just yank what's in quotes and drop in your .vimrc if you're not Lua'd yet)
@@ -149,17 +146,6 @@ return require("packer").startup({
 					after = "nvim-treesitter",
 				},
 			},
-		})
-		use({ "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } })
-		use({
-			"theHamsta/nvim-dap-virtual-text",
-			config = function()
-				require("nvim-dap-virtual-text").setup()
-			end,
-		})
-
-		use({
-			"nvim-lua/plenary.nvim",
 		})
 
 		use({

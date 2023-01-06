@@ -102,6 +102,7 @@ null.setup({
 				"yaml",
 				"markdown",
 				"graphql",
+				"vue",
 			},
 		}),
 	},

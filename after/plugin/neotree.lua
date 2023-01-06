@@ -212,9 +212,10 @@ require("neo-tree").setup({
 	},
 })
 
-vim.cmd([[nnoremap \ :Neotree reveal<cr>]])
+local opts = { noremap = true, silent = true }
+
+vim.api.nvim_set_keymap("n", "<leader>fr", ":Neotree reveal<cr>", opts)
 vim.cmd([[nnoremap <F2> :NeoTreeFocusToggle<cr>]])
 
-local opts = { noremap = true, silent = true }
 vim.api.nvim_set_keymap("n", "<F3>", "<cmd>Neotree float git_status<CR>", opts)
 vim.api.nvim_set_keymap("n", "<F4>", "<cmd>Neotree buffers<CR>", opts)

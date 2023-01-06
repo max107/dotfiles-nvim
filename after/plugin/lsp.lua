@@ -4,6 +4,7 @@ if not ok then
 end
 
 local nvim_lsp = require("lspconfig")
+local util = require("lspconfig.util")
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 
@@ -42,7 +43,7 @@ local on_attach = function(client, bufnr)
 	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
 
 	-- if client.server_capabilities.document_formatting then
-	-- vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
+	vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
 	-- end
 end
 
@@ -54,11 +55,11 @@ local servers = {
 	"cssls",
 	"terraformls",
 	"vimls",
-	"tsserver",
 	"pyright",
 	"dockerls",
 	"gopls",
 	"intelephense",
+	"vuels",
 }
 for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup({
@@ -66,6 +67,20 @@ for _, lsp in ipairs(servers) do
 		server_capabilities = capabilities,
 	})
 end
+
+nvim_lsp.tsserver.setup({
+	on_attach = on_attach,
+	server_capabilities = capabilities,
+	root_dir = util.root_pattern(
+		"package.json",
+		"tsconfig.json",
+		"tsconfig.config.json",
+		"tsconfig.app.json",
+		"tsconfig.vitest.json",
+		"jsconfig.json",
+		".git"
+	),
+})
 
 vim.cmd("nnoremap <F6> :LspInfo<CR>")
 
