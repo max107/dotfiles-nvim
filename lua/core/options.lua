@@ -146,33 +146,3 @@ end
 vim.cmd([[let &t_Cs = "\e[4:3m"]])
 vim.cmd([[let &t_Ce = "\e[4:0m"]])
 
--- Highlight on yank
-vim.cmd(
-	[[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=100}
-  augroup end
-]],
-	false
-)
-
--- Only show the cursor line in the active buffer.
-vim.cmd([[
-augroup CursorLine
-		au!
-		au VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-		au WinLeave * setlocal nocursorline
-augroup END
-]])
-
--- Remove whitespace on save
-vim.cmd([[au BufWritePre * :%s/\s\+$//e]])
-
--- Don't auto commenting new lines
-vim.cmd([[au BufEnter * set fo-=c fo-=r fo-=o]])
-
--- go to last location when opening a buffer
-vim.cmd [[
-  autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | execute "normal! g`\"" | endif
-]]

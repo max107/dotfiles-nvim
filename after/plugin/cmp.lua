@@ -92,7 +92,7 @@ null.setup({
 		-- end
 	end,
 	sources = {
-		null.builtins.formatting.stylua,
+		-- null.builtins.formatting.stylua,
 		null.builtins.formatting.black,
 		null.builtins.formatting.prettier.with({
 			filetypes = {

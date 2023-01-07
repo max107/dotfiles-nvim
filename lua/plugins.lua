@@ -25,15 +25,34 @@ return require("packer").startup({
 
 		use("wbthomason/packer.nvim")
 
-		use("ray-x/go.nvim")
-		use("ray-x/guihua.lua") -- recommanded if need floating window support
+		use({
+			"neovim/nvim-lspconfig",
+		})
+
+		-- use lspsaga or
+		use({
+			"glepnir/lspsaga.nvim",
+			branch = "main",
+		})
+		-- navigator.lua
 		-- use({
-		-- 	"crispgm/nvim-go",
+		-- 	"ray-x/navigator.lua",
 		-- 	requires = {
-		-- 		"nvim-lua/plenary.nvim",
-		-- 		"nvim-lua/popup.nvim",
+		-- 		{ "ray-x/guihua.lua", run = "cd lua/fzy && make" },
+		-- 		{ "neovim/nvim-lspconfig" },
 		-- 	},
 		-- })
+
+		use({
+			"ray-x/go.nvim",
+			requires = {
+				{ "ray-x/guihua.lua", run = "cd lua/fzy && make" },
+			},
+		})
+
+		use({
+			"norcalli/nvim-colorizer.lua",
+		})
 
 		use({
 			"terrortylor/nvim-comment",
@@ -53,49 +72,29 @@ return require("packer").startup({
 		use("nelsyeung/twig.vim")
 		use({
 			"j-hui/fidget.nvim",
-			config = function()
-				require("fidget").setup({})
-			end,
+		})
+
+		use({
+			"kyazdani42/nvim-tree.lua",
+			requires = {
+				"kyazdani42/nvim-web-devicons", -- optional, for file icon
+			},
 		})
 
 		-- use({
-		-- 	"kyazdani42/nvim-tree.lua",
+		-- 	"nvim-neo-tree/neo-tree.nvim",
+		-- 	branch = "v2.x",
 		-- 	requires = {
-		-- 		"kyazdani42/nvim-web-devicons", -- optional, for file icon
+		-- 		"nvim-lua/plenary.nvim",
+		-- 		"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+		-- 		"MunifTanjim/nui.nvim",
+		-- 		{
+		-- 			-- only needed if you want to use the commands with "_with_window_picker" suffix
+		-- 			"s1n7ax/nvim-window-picker",
+		-- 			tag = "v1.*",
+		-- 		},
 		-- 	},
 		-- })
-
-		use({
-			"nvim-neo-tree/neo-tree.nvim",
-			branch = "v2.x",
-			requires = {
-				"nvim-lua/plenary.nvim",
-				"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
-				"MunifTanjim/nui.nvim",
-				{
-					-- only needed if you want to use the commands with "_with_window_picker" suffix
-					"s1n7ax/nvim-window-picker",
-					tag = "v1.*",
-					config = function()
-						require("window-picker").setup({
-							autoselect_one = true,
-							include_current = false,
-							filter_rules = {
-								-- filter using buffer options
-								bo = {
-									-- if the file type is one of following, the window will be ignored
-									filetype = { "neo-tree", "neo-tree-popup", "notify", "quickfix" },
-
-									-- if the buffer type is one of following, the window will be ignored
-									buftype = { "terminal" },
-								},
-							},
-							other_win_hl_color = "#e35e4f",
-						})
-					end,
-				},
-			},
-		})
 
 		use({
 			"onsails/lspkind-nvim",
@@ -116,15 +115,26 @@ return require("packer").startup({
 		use({
 			"sainnhe/sonokai",
 			config = function()
-				-- vim.cmd([[ colorscheme sonokai ]])
+				vim.cmd([[ colorscheme sonokai ]])
 			end,
 		})
 		use({
 			"whatsthatsmell/codesmell_dark.vim",
 			config = function()
 				-- configs (just yank what's in quotes and drop in your .vimrc if you're not Lua'd yet)
-				vim.cmd("set fillchars+=vert:│")
-				vim.cmd("colorscheme codesmell_dark")
+				-- vim.cmd("set fillchars+=vert:│")
+				-- vim.cmd("colorscheme codesmell_dark")
+			end,
+		})
+
+		use({
+			"folke/which-key.nvim",
+			config = function()
+				require("which-key").setup({
+					-- your configuration comes here
+					-- or leave it empty to use the default settings
+					-- refer to the configuration section below
+				})
 			end,
 		})
 		use({
@@ -148,10 +158,6 @@ return require("packer").startup({
 			},
 		})
 
-		use({
-			"neovim/nvim-lspconfig",
-		})
-
 		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 		use({
 			"nvim-telescope/telescope.nvim",
@@ -173,6 +179,7 @@ return require("packer").startup({
 			"nvim-lualine/lualine.nvim",
 			requires = { "kyazdani42/nvim-web-devicons", opt = true },
 		})
+
 		if packer_bootstrap then
 			require("packer").sync()
 		end

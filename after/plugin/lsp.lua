@@ -1,87 +1,198 @@
 local ok, _ = pcall(require, "lspconfig")
 if not ok then
-	return
+  return
 end
 
-local nvim_lsp = require("lspconfig")
-local util = require("lspconfig.util")
--- Mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
+local saga = require("lspsaga")
 
-local opts = { noremap = true, silent = true }
-vim.api.nvim_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
-vim.api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
-vim.api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
-vim.api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-	-- Enable completion triggered by <c-x><c-o>
-	vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-
-	-- Mappings.
-	-- See `:help vim.lsp.*` for documentation on any of the below functions
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gd", "<cmd>lua vim.lsp.buf.definition()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<C-k>", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wa", "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>wr", "<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(
-		bufnr,
-		"n",
-		"<space>wl",
-		"<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>",
-		opts
-	)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>D", "<cmd>lua vim.lsp.buf.type_definition()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>rn", "<cmd>lua vim.lsp.buf.rename()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<space>ca", "<cmd>lua vim.lsp.buf.code_action()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", "<cmd>lua vim.lsp.buf.references()<CR>", opts)
-	vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>cf", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
-
-	-- if client.server_capabilities.document_formatting then
-	vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
-	-- end
-end
-
-local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-local servers = {
-	"html",
-	"cssls",
-	"terraformls",
-	"vimls",
-	"pyright",
-	"dockerls",
-	"gopls",
-	"intelephense",
-	"vuels",
-}
-for _, lsp in ipairs(servers) do
-	nvim_lsp[lsp].setup({
-		on_attach = on_attach,
-		server_capabilities = capabilities,
-	})
-end
-
-nvim_lsp.tsserver.setup({
-	on_attach = on_attach,
-	server_capabilities = capabilities,
-	root_dir = util.root_pattern(
-		"package.json",
-		"tsconfig.json",
-		"tsconfig.config.json",
-		"tsconfig.app.json",
-		"tsconfig.vitest.json",
-		"jsconfig.json",
-		".git"
-	),
+saga.init_lsp_saga({
+  -- show outline
+  show_outline = {
+    win_position = "right",
+    win_with = "",
+    win_width = 30,
+    auto_enter = true,
+    auto_preview = true,
+    virt_text = "┃",
+    jump_key = "<cr>",
+    -- auto refresh when change buffer
+    auto_refresh = true,
+  },
 })
 
-vim.cmd("nnoremap <F6> :LspInfo<CR>")
+-- Lsp finder find the symbol definition implement reference
+-- if there is no implement it will hide
+-- when you use action in finder like open vsplit then you can
+-- use <C-t> to jump back
+vim.keymap.set("n", "gh", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
 
-vim.api.nvim_set_keymap("n", "<leader>fc", ":lua vim.lsp.buf.format()<CR>", { noremap = true })
+-- Code action
+vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
+
+-- Rename
+vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga rename<CR>", { silent = true })
+
+-- Peek Definition
+-- you can edit the definition file in this flaotwindow
+-- also support open/vsplit/etc operation check definition_action_keys
+-- support tagstack C-t jump back
+vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+
+-- Show line diagnostics
+vim.keymap.set("n", "<leader>cd", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
+
+-- Show cursor diagnostics
+vim.keymap.set("n", "<leader>cd", "<cmd>Lspsaga show_cursor_diagnostics<CR>", { silent = true })
+
+-- Diagnostic jump can use `<c-o>` to jump back
+vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { silent = true })
+vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { silent = true })
+
+-- Only jump to error
+vim.keymap.set("n", "[D", function()
+  require("lspsaga.diagnostic").goto_prev({
+    severity = vim.diagnostic.severity.ERROR,
+  })
+end, { silent = true })
+
+vim.keymap.set("n", "]D", function()
+  require("lspsaga.diagnostic").goto_next({
+    severity = vim.diagnostic.severity.ERROR,
+  })
+end, { silent = true })
+
+-- Outline
+vim.keymap.set("n", "<leader>o", "<cmd>Lspsaga outline<CR>", { silent = true })
+
+-- Hover Doc
+vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
+-- api.nvim_create_autocmd("LspAttach", {
+-- 	callback = function(args)
+-- 		keymap.set("n", "K", vim.lsp.buf.hover, { buffer = args.buf })
+-- 	end,
+-- })
+
+require("fidget").setup({})
+
+local nvim_lsp = require("lspconfig")
+
+local on_attach = function(client, bufnr)
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+
+  -- Mappings.
+  -- See `:help vim.diagnostic.*` for documentation on any of the below functions
+
+  -- local opts = { noremap = true, silent = true }
+  -- api.nvim_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
+  -- api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
+  -- api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
+  -- api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+
+  -- lua print(vim.inspect(vim.lsp.get_client_by_id(1).server_capabilities))
+  -- print(vim.inspect(client.server_capabilities))
+
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+
+  if client.server_capabilities.hoverProvider then
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr })
+  end
+
+  if client.server_capabilities.documentFormattingProvider then
+    -- @todo nnoremap <silent> <leader>f <cmd>lua vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})<CR>
+
+    -- You can make the format request manually.
+    -- Like format then save instead of autoformat on save.
+    vim.keymap.set('n', '<leader>w', function()
+      local params = vim.lsp.util.make_formatting_params({})
+      local handler = function(err, result)
+        if not result then return end
+
+        vim.lsp.util.apply_text_edits(result, bufnr, client.offset_encoding)
+        vim.cmd('write')
+      end
+
+      client.request('textDocument/formatting', params, handler, bufnr)
+    end, { buffer = bufnr })
+
+    -- default code format keybinding
+    vim.keymap.set("n", "<leader>fc", vim.lsp.buf.format, { buffer = bufnr })
+
+    -- autoformat code on save
+    -- vim.api.nvim_create_autocmd('BufWritePre', {
+    --   -- pattern or buffer
+    --   -- pattern = '*.lua',
+    --   buffer = args.buf,
+    --   callback = function()
+    --     vim.lsp.buf.format()
+    --   end,
+    -- })
+  end
+end
+
+-- same as above but via autocmd
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--   callback = function(args)
+--     on_attach(
+--       vim.lsp.get_client_by_id(args.data.client_id),
+--       args.buf
+--     )
+--   end,
+-- })
+local default_capabilities = require("cmp_nvim_lsp").default_capabilities(
+  vim.lsp.protocol.make_client_capabilities()
+)
+default_capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+local capabilities = vim.tbl_deep_extend(
+  'force',
+  nvim_lsp.util.default_config.capabilities,
+  default_capabilities
+)
+
+local servers = {
+  "html",
+  "cssls",
+  "terraformls",
+  "vimls",
+  "pyright",
+  "dockerls",
+  "tsserver",
+  "gopls",
+  "intelephense",
+  "vuels",
+}
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup({
+    on_attach = on_attach,
+    server_capabilities = capabilities,
+  })
+end
+
+nvim_lsp.sumneko_lua.setup({
+  on_attach = on_attach,
+  server_capabilities = capabilities,
+  -- init_options = { documentFormatting = true },
+  settings = {
+    Lua = {
+      runtime = {
+        version = "LuaJIT",
+      },
+      diagnostics = {
+        globals = { "vim" },
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = vim.api.nvim_get_runtime_file("lua", true),
+        checkThirdParty = false,
+      },
+      telemetry = {
+        enable = false,
+      },
+    },
+  },
+})
+
+-- @todo fixme
+vim.cmd("nnoremap <F6> :LspInfo<CR>")

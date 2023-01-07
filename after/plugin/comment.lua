@@ -19,6 +19,7 @@ require("nvim_comment").setup({
 		require("ts_context_commentstring.internal").update_commentstring()
 	end,
 })
+
 vim.cmd([[
 augroup set-commentstring-ag
 autocmd!

@@ -6,10 +6,18 @@ end
 local npairs = require("nvim-autopairs")
 npairs.setup({
 	enable_check_bracket_line = true, -- Don't add pairs if it already have a close pairs in same line
-	disable_filetype = { "TelescopePrompt", "vim" }, --
+	disable_filetype = { "TelescopePrompt", "guihua", "guihua_rust", "clap_input" },
 	enable_afterquote = false, -- add bracket pairs after quote
 	enable_moveright = true,
 })
+
+if vim.o.ft == "clap_input" and vim.o.ft == "guihua" and vim.o.ft == "guihua_rust" then
+	require("cmp").setup.buffer({
+		completion = {
+			enable = false,
+		},
+	})
+end
 
 -- If you want insert `(` after select function or method item
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
