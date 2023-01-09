@@ -4,6 +4,3 @@ if not ok then
 end
 
 require("go").setup()
--- require("go").setup({
--- 	auto_lint = false,
--- })

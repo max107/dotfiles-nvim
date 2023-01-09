@@ -16,7 +16,7 @@ require("nvim_comment").setup({
 	operator_mapping = "gc",
 	-- Hook function to call before commenting takes place
 	hook = function()
-		require("ts_context_commentstring.internal").update_commentstring()
+		require("ts_context_commentstring.internal").update_commentstring({})
 	end,
 })
 

@@ -72,6 +72,8 @@ vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
 -- 	end,
 -- })
 
+vim.keymap.set("n", "<F6>", "<cmd>LspInfo<cr>", { silent = true })
+
 require("fidget").setup({})
 
 local nvim_lsp = require("lspconfig")
@@ -99,25 +101,44 @@ local on_attach = function(client, bufnr)
     vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = bufnr })
   end
 
-  if client.server_capabilities.documentFormattingProvider then
-    -- @todo nnoremap <silent> <leader>f <cmd>lua vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})<CR>
+  -- Server capabilities spec:
+  -- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#serverCapabilities
+  if client.server_capabilities.documentHighlightProvider then
+    vim.api.nvim_create_augroup("lsp_document_highlight", { clear = true })
+    vim.api.nvim_clear_autocmds({ buffer = bufnr, group = "lsp_document_highlight" })
+    vim.api.nvim_create_autocmd("CursorHold", {
+      callback = vim.lsp.buf.document_highlight,
+      buffer = bufnr,
+      group = "lsp_document_highlight",
+      desc = "Document Highlight",
+    })
+    vim.api.nvim_create_autocmd("CursorMoved", {
+      callback = vim.lsp.buf.clear_references,
+      buffer = bufnr,
+      group = "lsp_document_highlight",
+      desc = "Clear All the References",
+    })
+  end
 
+  if client.server_capabilities.documentFormattingProvider then
     -- You can make the format request manually.
     -- Like format then save instead of autoformat on save.
-    vim.keymap.set('n', '<leader>w', function()
-      local params = vim.lsp.util.make_formatting_params({})
-      local handler = function(err, result)
-        if not result then return end
+    -- vim.keymap.set('n', '<leader>w', function()
+    --   local params = vim.lsp.util.make_formatting_params({})
+    --   local handler = function(err, result)
+    --     if not result then return end
 
-        vim.lsp.util.apply_text_edits(result, bufnr, client.offset_encoding)
-        vim.cmd('write')
-      end
+    --     vim.lsp.util.apply_text_edits(result, bufnr, client.offset_encoding)
+    --     vim.cmd('write')
+    --   end
 
-      client.request('textDocument/formatting', params, handler, bufnr)
-    end, { buffer = bufnr })
+    --   client.request('textDocument/formatting', params, handler, bufnr)
+    -- end, { buffer = bufnr })
 
     -- default code format keybinding
-    vim.keymap.set("n", "<leader>fc", vim.lsp.buf.format, { buffer = bufnr })
+    vim.keymap.set("n", "<leader>fc", vim.lsp.buf.format, {
+      buffer = bufnr,
+    })
 
     -- autoformat code on save
     -- vim.api.nvim_create_autocmd('BufWritePre', {
@@ -140,16 +161,10 @@ end
 --     )
 --   end,
 -- })
-local default_capabilities = require("cmp_nvim_lsp").default_capabilities(
-  vim.lsp.protocol.make_client_capabilities()
-)
+local default_capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 default_capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-local capabilities = vim.tbl_deep_extend(
-  'force',
-  nvim_lsp.util.default_config.capabilities,
-  default_capabilities
-)
+local capabilities = vim.tbl_deep_extend("force", nvim_lsp.util.default_config.capabilities, default_capabilities)
 
 local servers = {
   "html",
@@ -173,7 +188,9 @@ end
 nvim_lsp.sumneko_lua.setup({
   on_attach = on_attach,
   server_capabilities = capabilities,
-  -- init_options = { documentFormatting = true },
+  init_options = {
+    documentFormatting = false,
+  },
   settings = {
     Lua = {
       runtime = {
@@ -193,6 +210,3 @@ nvim_lsp.sumneko_lua.setup({
     },
   },
 })
-
--- @todo fixme
-vim.cmd("nnoremap <F6> :LspInfo<CR>")

@@ -1,7 +1,6 @@
 -----------------------------------------------------------
 -- Terminal
 -----------------------------------------------------------
-
 -- Open a terminal pane on the right using :Term
 vim.cmd([[command Term :botright vsplit term://$SHELL]])
 
