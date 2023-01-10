@@ -7,6 +7,9 @@ vim.api.nvim_set_keymap("n", "<leader>c", ":nohl<CR>", default_opts)
 vim.api.nvim_set_keymap("n", "<leader>w", ":w<CR>", default_opts)
 vim.api.nvim_set_keymap("i", "<leader>w", "<C-c>:w<CR>", default_opts)
 
+-- Real delete
+vim.api.nvim_set_keymap("n", "'", '"_', default_opts)
+
 vim.cmd([[
 " fix for typo like :W or :Q
 command! W write

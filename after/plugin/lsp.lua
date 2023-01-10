@@ -36,7 +36,7 @@ vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga rename<CR>", { silent = true })
 -- you can edit the definition file in this flaotwindow
 -- also support open/vsplit/etc operation check definition_action_keys
 -- support tagstack C-t jump back
-vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
+vim.keymap.set("n", "gD", "<cmd>Lspsaga peek_definition<CR>", { silent = true })
 
 -- Show line diagnostics
 vim.keymap.set("n", "<leader>cd", "<cmd>Lspsaga show_line_diagnostics<CR>", { silent = true })
@@ -85,11 +85,12 @@ local on_attach = function(client, bufnr)
   -- Mappings.
   -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 
-  -- local opts = { noremap = true, silent = true }
+  local opts = { noremap = true, silent = true }
   -- api.nvim_set_keymap("n", "<space>e", "<cmd>lua vim.diagnostic.open_float()<CR>", opts)
   -- api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
   -- api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
   -- api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
+  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 
   -- lua print(vim.inspect(vim.lsp.get_client_by_id(1).server_capabilities))
   -- print(vim.inspect(client.server_capabilities))

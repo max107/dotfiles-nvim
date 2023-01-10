@@ -80,18 +80,18 @@ return require("packer").startup({
     -- })
 
     use({
-    	"nvim-neo-tree/neo-tree.nvim",
-    	branch = "v2.x",
-    	requires = {
-    		"nvim-lua/plenary.nvim",
-    		"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
-    		"MunifTanjim/nui.nvim",
-    		{
-    			-- only needed if you want to use the commands with "_with_window_picker" suffix
-    			"s1n7ax/nvim-window-picker",
-    			tag = "v1.*",
-    		},
-    	},
+      "nvim-neo-tree/neo-tree.nvim",
+      branch = "v2.x",
+      requires = {
+        "nvim-lua/plenary.nvim",
+        "kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+        "MunifTanjim/nui.nvim",
+        {
+          -- only needed if you want to use the commands with "_with_window_picker" suffix
+          "s1n7ax/nvim-window-picker",
+          tag = "v1.*",
+        },
+      },
     })
 
     use({
@@ -129,16 +129,8 @@ return require("packer").startup({
         -- vim.cmd("colorscheme codesmell_dark")
       end,
     })
-
     use({
-      "folke/which-key.nvim",
-      config = function()
-        require("which-key").setup({
-          -- your configuration comes here
-          -- or leave it empty to use the default settings
-          -- refer to the configuration section below
-        })
-      end,
+      "chentoast/marks.nvim",
     })
     use({
       "nvim-treesitter/nvim-treesitter",
