@@ -2,7 +2,7 @@
 -- Terminal
 -----------------------------------------------------------
 -- Open a terminal pane on the right using :Term
-vim.cmd([[command Term :botright vsplit term://$SHELL]])
+vim.cmd([[command Term :botright split term://$SHELL]])
 
 -- Terminal visual tweaks:
 --- enter insert mode when switching to terminal

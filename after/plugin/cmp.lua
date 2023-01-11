@@ -83,35 +83,3 @@ au FileType TelescopePrompt lua require('cmp').setup.buffer { enabled = false }
 augroup END
 ]])
 
-local null_ls = require("null-ls")
-null_ls.setup({
-  -- on_attach = function(client)
-  -- if client.server_capabilities.document_formatting then
-  -- vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
-  -- end
-  -- end,
-  sources = {
-    null_ls.builtins.formatting.stylua,
-    -- null_ls.builtins.formatting.black,
-    null_ls.builtins.formatting.ruff,
-    null_ls.builtins.formatting.terrafmt,
-    -- null_ls.builtins.formatting.terraform_fmt,
-    null_ls.builtins.formatting.xmlformat,
-    null_ls.builtins.formatting.yamlfmt,
-    null_ls.builtins.formatting.sql_formatter,
-    null_ls.builtins.formatting.phpcsfixer,
-    null_ls.builtins.formatting.protolint,
-    null_ls.builtins.formatting.reorder_python_imports,
-    null_ls.builtins.formatting.prettier.with({
-      filetypes = {
-        "scss",
-        "css",
-        "json",
-        "yaml",
-        "markdown",
-        "graphql",
-        "vue",
-      },
-    }),
-  },
-})

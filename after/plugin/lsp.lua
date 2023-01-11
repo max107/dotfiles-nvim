@@ -24,7 +24,7 @@ saga.init_lsp_saga({
 -- if there is no implement it will hide
 -- when you use action in finder like open vsplit then you can
 -- use <C-t> to jump back
-vim.keymap.set("n", "gh", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
+vim.keymap.set("n", "gd", "<cmd>Lspsaga lsp_finder<CR>", { silent = true })
 
 -- Code action
 vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { silent = true })
@@ -90,7 +90,7 @@ local on_attach = function(client, bufnr)
   -- api.nvim_set_keymap("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>", opts)
   -- api.nvim_set_keymap("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>", opts)
   -- api.nvim_set_keymap("n", "<space>q", "<cmd>lua vim.diagnostic.setloclist()<CR>", opts)
-  vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+  -- vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 
   -- lua print(vim.inspect(vim.lsp.get_client_by_id(1).server_capabilities))
   -- print(vim.inspect(client.server_capabilities))
@@ -198,7 +198,7 @@ nvim_lsp.sumneko_lua.setup({
         version = "LuaJIT",
       },
       diagnostics = {
-        globals = { "vim" },
+        globals = { "vim", "use" },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
@@ -209,5 +209,34 @@ nvim_lsp.sumneko_lua.setup({
         enable = false,
       },
     },
+  },
+})
+
+local null_ls = require("null-ls")
+null_ls.setup({
+  on_attach = on_attach,
+  sources = {
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.black,
+    -- null_ls.builtins.formatting.ruff,
+    null_ls.builtins.formatting.terrafmt,
+    -- null_ls.builtins.formatting.terraform_fmt,
+    null_ls.builtins.formatting.xmlformat,
+    null_ls.builtins.formatting.yamlfmt,
+    null_ls.builtins.formatting.sql_formatter,
+    null_ls.builtins.formatting.phpcsfixer,
+    null_ls.builtins.formatting.protolint,
+    null_ls.builtins.formatting.reorder_python_imports,
+    null_ls.builtins.formatting.prettier.with({
+      filetypes = {
+        "scss",
+        "css",
+        "json",
+        "yaml",
+        "markdown",
+        "graphql",
+        "vue",
+      },
+    }),
   },
 })
