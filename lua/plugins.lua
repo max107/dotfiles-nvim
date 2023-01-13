@@ -118,7 +118,7 @@ return require("packer").startup({
 		use({
 			"sainnhe/sonokai",
 			config = function()
-				-- vim.cmd([[ colorscheme sonokai ]])
+				vim.cmd([[ colorscheme sonokai ]])
 			end,
 		})
 		use({
@@ -139,7 +139,7 @@ return require("packer").startup({
 				-- vim.opt.background = "light"
 				-- vim.cmd([[ colorscheme onehalflight ]])
 
-				vim.cmd([[ colorscheme onehalfdark ]])
+				-- vim.cmd([[ colorscheme onehalfdark ]])
 			end,
 		})
 		use({
