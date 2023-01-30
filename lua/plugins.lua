@@ -134,7 +134,7 @@ return require("packer").startup({
 		})
 		use({
 			"sonph/onehalf",
-      rtp = 'vim',
+			rtp = "vim",
 			config = function()
 				-- vim.opt.background = "light"
 				-- vim.cmd([[ colorscheme onehalflight ]])

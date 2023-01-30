@@ -18,6 +18,7 @@ vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { sil
 
 -- Rename
 vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga rename<CR>", { silent = true })
+vim.keymap.set({"n", "t"}, "<leader>d", "<cmd>Lspsaga term_toggle<CR>")
 
 -- Peek Definition
 -- you can edit the definition file in this flaotwindow
@@ -50,7 +51,7 @@ end, { silent = true })
 
 -- Outline
 -- @todo https://github.com/glepnir/lspsaga.nvim/issues/648
--- vim.keymap.set("n", "<leader>o", "<cmd>Lspsaga outline<CR>", { silent = true })
+vim.keymap.set("n", "<leader>o", "<cmd>Lspsaga outline<CR>", { silent = true })
 
 -- Hover Doc
 vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { silent = true })
