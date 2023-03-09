@@ -18,7 +18,7 @@ vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>Lspsaga code_action<CR>", { sil
 
 -- Rename
 vim.keymap.set("n", "<leader>gr", "<cmd>Lspsaga rename<CR>", { silent = true })
-vim.keymap.set({"n", "t"}, "<leader>d", "<cmd>Lspsaga term_toggle<CR>")
+vim.keymap.set({ "n", "t" }, "<leader>d", "<cmd>Lspsaga term_toggle<CR>")
 
 -- Peek Definition
 -- you can edit the definition file in this flaotwindow
@@ -160,7 +160,7 @@ local servers = {
 	"html",
 	"cssls",
 	"terraformls",
-  "tflint",
+	"tflint",
 	"vimls",
 	"pyright",
 	"dockerls",
@@ -168,6 +168,7 @@ local servers = {
 	"gopls",
 	"intelephense",
 	"vuels",
+  -- "ruff_lsp",
 }
 for _, lsp in ipairs(servers) do
 	nvim_lsp[lsp].setup({
@@ -176,7 +177,7 @@ for _, lsp in ipairs(servers) do
 	})
 end
 
-nvim_lsp.sumneko_lua.setup({
+nvim_lsp.lua_ls.setup({
 	on_attach = on_attach,
 	server_capabilities = capabilities,
 	init_options = {
@@ -206,6 +207,9 @@ local null_ls = require("null-ls")
 null_ls.setup({
 	on_attach = on_attach,
 	sources = {
+		null_ls.builtins.formatting.ruff,
+		null_ls.builtins.diagnostics.ruff,
+
 		null_ls.builtins.formatting.stylua,
 		null_ls.builtins.formatting.black,
 		-- null_ls.builtins.formatting.ruff,
@@ -230,4 +234,3 @@ null_ls.setup({
 		}),
 	},
 })
-

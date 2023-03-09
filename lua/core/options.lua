@@ -5,8 +5,8 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_python_provider = 0
 vim.g.loaded_perl_provider = 0
 
-vim.g.mapleader = "\\"
--- vim.g.mapleader = " "
+-- vim.g.mapleader = "\\"
+vim.g.mapleader = " "
 
 vim.scriptencoding = "utf-8"
 vim.opt.encoding = "utf-8"
